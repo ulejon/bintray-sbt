@@ -2,7 +2,7 @@ organization := "me.lessis"
 
 name := "bintray-sbt"
 
-version := "0.2.0-SNAPSHOT"
+version := "0.2.0-SKF"
 
 description := "package publisher for bintray.com"
 
@@ -11,15 +11,20 @@ homepage := Some(url(s"https://github.com/softprops/${name.value}#readme"))
 sbtPlugin := true
 
 libraryDependencies ++= Seq(
-  "me.lessis" %% "bintry" % "0.4.0-SNAPSHOT",
+  "me.lessis" %% "bintry" % "0.4.0",
   "org.slf4j" % "slf4j-nop" % "1.7.7") // https://github.com/softprops/bintray-sbt/issues/26
 
 scalacOptions ++= Seq(Opts.compile.deprecation, "-feature")
 
 resolvers += Resolver.sonatypeRepo("releases")
 
-licenses ++= Seq("MIT" -> url(
-  s"https://github.com/softprops/${name.value}/blob/${version.value}/LICENSE"))
+bintray.Keys.omitLicense := true
+
+bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("skf")
+
+bintray.Keys.repository in bintray.Keys.bintray := "connectivityroom"
+
+publishMavenStyle := true
 
 publishArtifact in Test := false
 
@@ -37,10 +42,10 @@ pomExtra := (
   </developers>
 )
 
-seq(lsSettings:_*)
+Seq(lsSettings:_*)
 
 externalResolvers in LsKeys.lsync := (resolvers in bintray.Keys.bintray).value
 
-seq(bintraySettings:_*)
+Seq(bintraySettings:_*)
 
 crossBuildingSettings
